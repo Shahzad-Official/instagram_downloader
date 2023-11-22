@@ -95,7 +95,7 @@ class DownloadTab extends StatelessWidget {
               ),
               children: [
                 Text(
-                  "Instagram Downloader supports MP4 format for high-definition video downloads.",
+                  "Instagram Downloader supports MP4 format for high-definition video downloads and png for photos.",
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
                 ),
                 SizedBox(

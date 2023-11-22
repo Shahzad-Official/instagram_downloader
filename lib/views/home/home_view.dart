@@ -1,3 +1,4 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -19,7 +20,13 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin {
+  final DeviceInfoPlugin _deviceInfoPlugin = DeviceInfoPlugin();
   late TabController _tabController;
+
+  getDeviceInfo() async {
+    AndroidDeviceInfo androidDeviceInfo = await _deviceInfoPlugin.androidInfo;
+    print(androidDeviceInfo.id);
+  }
 
   @override
   void initState() {
@@ -28,6 +35,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
       vsync: this,
     );
     Permission.manageExternalStorage.request();
+    getDeviceInfo();
     super.initState();
   }
 
@@ -70,6 +78,9 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
         children: [
           TabBar(
             controller: _tabController,
+            onTap: (value) {
+              getDeviceInfo();
+            },
             tabs: const [
               Tab(
                 text: "Download",

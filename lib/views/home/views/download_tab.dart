@@ -80,9 +80,7 @@ class DownloadTab extends StatelessWidget {
                   "Instagram Downloader prioritises user safety and employs security measures to protect your data.",
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+                AppSpacing.heightspace10,
               ],
             ),
             const ExpansionTile(
@@ -98,9 +96,7 @@ class DownloadTab extends StatelessWidget {
                   "Instagram Downloader supports MP4 format for high-definition video downloads and png for photos.",
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+                AppSpacing.heightspace10,
               ],
             ),
             const ExpansionTile(
@@ -116,9 +112,7 @@ class DownloadTab extends StatelessWidget {
                   "No, the tool is free, and no registration or fees are required.",
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+                AppSpacing.heightspace10,
               ],
             ),
             const ExpansionTile(
@@ -134,9 +128,7 @@ class DownloadTab extends StatelessWidget {
                   "Instagram Downloader is compatible with computers, tablets, and mobile devices.",
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+                AppSpacing.heightspace10,
               ],
             ),
             AppSpacing.heightspace20,

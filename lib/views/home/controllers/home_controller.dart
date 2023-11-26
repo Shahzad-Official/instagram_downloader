@@ -53,20 +53,28 @@ class HomeController extends GetxController {
   Future<String> pathName() async {
     String path1;
     String extension = ".mp4";
+    path1 = data.data!.data!.first.url!.substring(data.data!.data!.first.url!.length - 20).split("=").first;
     if (selectedType == FileTypes.photo) {
-      path1 = data.data!.data!.first.url!.split("/").last.split(".").first;
       extension = ".png";
-    } else {
-      path1 = data.data!.data!.first.url!.substring(data.data!.data!.first.url!.length - 20).split("=").first;
     }
 
-    String fileName = "${selectedType.name}_$path1$extension";
+    String fileName = "${selectedType == FileTypes.photo ? "thumbnail" : "video"}_$path1$extension";
     var directory = await StorageUtils.createFolder();
     String filePath = "${directory.path}$fileName";
     return filePath;
   }
 
+  CancelToken cancelToken = CancelToken();
+
+  cancelDownload() {
+    cancelToken.cancel();
+    progress = 0.0;
+    isDownloading = false;
+    update();
+  }
+
   download(context) async {
+    cancelToken = CancelToken();
     progress = 0.0;
     update();
     isDownloading = true;
@@ -76,6 +84,7 @@ class HomeController extends GetxController {
     await Dio().download(
       selectedType == FileTypes.photo ? data.data!.data!.first.thumbnail.toString() : data.data!.data!.first.url.toString(),
       path,
+      cancelToken: cancelToken,
       onReceiveProgress: (count, total) {
         progress = count / total;
         update();
@@ -93,7 +102,7 @@ class HomeController extends GetxController {
             builder: (context) => const HomeView(),
           ));
     }).catchError((err) {
-      debugPrint(err.toString());
+      debugPrint("Dio error => ${err.toString()}");
     });
     isDownloading = false;
     update();

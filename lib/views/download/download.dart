@@ -30,72 +30,80 @@ class _DownloadState extends State<Download> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const GradientAppBar(
-        titleText: "Download File",
-        actions: [],
-      ),
-      body: SafeArea(
-        child: GetBuilder<HomeController>(
-          init: HomeController(),
-          builder: (_) {
-            if (_.data.data == null) {
-              return const Center(
-                child: AppText(
-                  text: "No Data Found!",
-                ),
-              );
-            } else {
-              return Column(
-                children: [
-                  AppSpacing.heightspace10,
-                  widget.type == FileTypes.photo
-                      ? Expanded(
-                          child: Image.network(
-                            _.data.data!.data!.first.thumbnail.toString(),
-                          ),
-                        )
-                      : Expanded(
-                          child: AppVideoPlayer(
-                            url: _.data.data!.data!.first.url.toString(),
-                          ),
-                        ),
-                  AppSpacing.heightspace10,
-                  _.isDownloading
-                      ? Column(
-                          children: [
-                            Text(
-                              "Downloading  ${(_.progress * 100).toStringAsFixed(0)}%",
-                              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+    return WillPopScope(
+      onWillPop: () async {
+        _controller.cancelDownload();
+        return true;
+      },
+      child: Scaffold(
+        appBar: const GradientAppBar(
+          titleText: "Download File",
+          actions: [],
+        ),
+        body: SafeArea(
+          child: GetBuilder<HomeController>(
+            init: HomeController(),
+            builder: (_) {
+              if (_.data.data == null) {
+                return const Center(
+                  child: AppText(
+                    text: "No Data Found!",
+                  ),
+                );
+              } else {
+                return Column(
+                  children: [
+                    AppSpacing.heightspace10,
+                    widget.type == FileTypes.photo
+                        ? Expanded(
+                            child: Image.network(
+                              _.data.data!.data!.first.thumbnail.toString(),
                             ),
-                            AppSpacing.heightspace5,
-                            LinearProgressIndicator(
-                              value: _.progress,
-                              minHeight: 7,
+                          )
+                        : Expanded(
+                            child: AppVideoPlayer(
+                              url: _.data.data!.data!.first.url.toString(),
                             ),
-                            AppSpacing.heightspace10,
-                          ],
-                        )
-                      : const SizedBox(),
-                  _.hasError
-                      ? const SizedBox()
-                      : Center(
-                          child: AppButton(
-                            height: 55,
-                            width: 150,
-                            onTap: _.isDownloading
-                                ? () {}
-                                : () async {
-                                    await _.download(context);
-                                  },
-                            text: "Download",
                           ),
-                        ),
-                  AppSpacing.heightspace20,
-                ],
-              );
-            }
-          },
+                    AppSpacing.heightspace10,
+                    _.isDownloading
+                        ? Column(
+                            children: [
+                              Text(
+                                "Downloading  ${(_.progress * 100).toStringAsFixed(0)}%",
+                                style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+                              ),
+                              AppSpacing.heightspace5,
+                              LinearProgressIndicator(
+                                value: _.progress,
+                                minHeight: 7,
+                              ),
+                              AppSpacing.heightspace10,
+                            ],
+                          )
+                        : const SizedBox(),
+                    _.hasError
+                        ? const SizedBox()
+                        : Center(
+                            child: AppButton(
+                              height: 55,
+                              width: 150,
+                              onTap: _.isDownloading
+                                  ? () {
+                                      _.cancelDownload();
+                                    }
+                                  : () async {
+                                      await _.download(context);
+                                    },
+                              text: _.isDownloading ? "Cancel Download" : "Download",
+                            ),
+                          ),
+                    AppSpacing.heightspace20,
+                  ],
+                );
+              }
+            },
+          ),
         ),
       ),
     );

@@ -11,7 +11,7 @@ class FetchData {
     var body = jsonEncode({"url": url});
 
     await post(
-      Uri.parse("https://chapbuy.com/social-downloader/social-downloader/insta-fb"),
+      Uri.parse("https://chapbuy.com/downloader/downloader/insta-fb"),
       body: body,
       headers: {
         "Content-Type": "application/json",
